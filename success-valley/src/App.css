@@ -1,0 +1,8 @@
+/* App styles are minimal because Tailwind handles the layout classes. */
+body {
+  margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
