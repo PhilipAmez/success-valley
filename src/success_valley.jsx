@@ -5,6 +5,9 @@ import ProductCard from './components/ProductCard'
 import BlogCard from './components/BlogCard'
 import SectionHeader from './components/SectionHeader'
 import fishCatfishImage from './img/fish-fresh-caught-catfish.jpg'
+import logoImage from './img/logo.jpg'
+import pigfarmImage1 from './img/pig-farm.jpg'
+import poultryImage1 from './img/poultryfarm.jpg'
 
 const navLinks = [
   { label: 'Home', target: 'hero' },
@@ -43,13 +46,12 @@ const products = [
     name: 'Processed Meat',
     description: 'Hygienically prepared cuts and packaged for food service.',
     image:
-      'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80'
+          pigfarmImage1 
   },
   {
     name: 'Fresh Poultry',
     description: 'Premium poultry cuts prepared and packed for food service.',
-    image:
-      'https://images.unsplash.com/photo-1506806732259-39c2d0268443?auto=format&fit=crop&w=1200&q=80'
+    image: poultryImage1
   }
 ]
 
@@ -83,7 +85,7 @@ export default function SuccessValleyFarmsPreview() {
   }
 
   const handleWhatsApp = (message = 'Hello Success Valley Farms, I would like to place an order.') => {
-    const phone = '1234567890'
+    const phone = '0556078858'
     const encoded = encodeURIComponent(message)
     window.open(`https://wa.me/${phone}?text=${encoded}`, '_blank')
   }
@@ -92,17 +94,22 @@ export default function SuccessValleyFarmsPreview() {
     window.location.href = 'tel:+1234567890'
   }
 
-  const handleOrder = (itemName) => {
-    handleWhatsApp(`Hello, I would like to order ${itemName} from Success Valley Farms.`)
+  const handleOrder = (itemName, quantity = 1) => {
+    handleWhatsApp(
+      `Hello, I would like to order ${quantity} x ${itemName} from Success Valley Farms.`
+    )
   }
 
   return (
     <div className="min-h-screen bg-white text-gray-800 font-sans">
       <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200 shadow-sm">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-          <div>
-            <h1 className="text-2xl font-bold text-rose-900">SUCCESS VALLEY FARMS</h1>
-            <p className="text-xs text-gray-500 uppercase tracking-[0.3em]">Fresh • Trusted • Local</p>
+          <div className="flex items-center gap-3">
+            <img src={logoImage} alt="Success Valley Farms logo" className="h-12 w-12 rounded-full object-cover border border-gray-200" />
+            <div>
+              <h1 className="text-2xl font-bold text-rose-900">SUCCESS VALLEY FARMS</h1>
+              <p className="text-xs text-gray-500 uppercase tracking-[0.3em]">Fresh • Trusted • Local</p>
+            </div>
           </div>
 
           <nav className="hidden md:flex items-center gap-8">
@@ -169,6 +176,9 @@ export default function SuccessValleyFarmsPreview() {
           }}
         >
           <div className="absolute inset-0 bg-black/50"></div>
+          <div className="absolute inset-0 flex items-center justify-center opacity-20 pointer-events-none">
+            <img src={logoImage} alt="" className="h-48 w-48 object-contain" />
+          </div>
           <div className="relative z-10 mx-auto max-w-3xl px-6 text-white">
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-6">
               Fresh Meat & Fish Delivered With Quality
@@ -275,8 +285,14 @@ export default function SuccessValleyFarmsPreview() {
         </section>
       </main>
 
-      <footer className="bg-black text-gray-400 text-center py-8">
-        <p>© 2026 Success Valley Farms. All Rights Reserved.</p>
+      <footer className="bg-black text-gray-400 py-8">
+        <div className="mx-auto flex max-w-7xl flex-col items-center gap-4 px-6 sm:flex-row sm:justify-between">
+          <div className="flex items-center gap-3 text-white">
+            <img src={logoImage} alt="Success Valley Farms logo" className="h-10 w-10 rounded-full border border-gray-700 object-cover" />
+            <span className="text-sm font-semibold">Success Valley Farms</span>
+          </div>
+          <p className="text-sm">© 2026 Success Valley Farms. All Rights Reserved.</p>
+        </div>
       </footer>
     </div>
   )
