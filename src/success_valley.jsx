@@ -8,6 +8,8 @@ import fishCatfishImage from './img/fish-fresh-caught-catfish.jpg'
 import logoImage from './img/logo.jpg'
 import pigfarmImage1 from './img/pig-farm.jpg'
 import poultryImage1 from './img/poultryfarm.jpg'
+import fish24 from './img/fish24.jpg'
+import meatfish1 from './img/meatfish1.webp'
 
 const navLinks = [
   { label: 'Home', target: 'hero' },
@@ -59,7 +61,7 @@ const blogPosts = [
   {
     title: 'How We Maintain Freshness in Our Products',
     image:
-      'https://images.unsplash.com/photo-1514511390099-67376b11078c?auto=format&fit=crop&w=1200&q=80'
+          meatfish1
   },
   {
     title: 'Benefits of Locally Produced Protein',
@@ -75,6 +77,8 @@ const blogPosts = [
 
 export default function SuccessValleyFarmsPreview() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [orderSummary, setOrderSummary] = useState(null)
+  const [orderNote, setOrderNote] = useState('')
 
   const scrollToSection = (sectionId) => {
     const section = document.getElementById(sectionId)
@@ -95,9 +99,21 @@ export default function SuccessValleyFarmsPreview() {
   }
 
   const handleOrder = (itemName, quantity = 1) => {
-    handleWhatsApp(
-      `Hello, I would like to order ${quantity} x ${itemName} from Success Valley Farms.`
-    )
+    setOrderSummary({ itemName, quantity })
+    setOrderNote('')
+  }
+
+  const confirmOrder = () => {
+    if (!orderSummary) return
+
+    const noteText = orderNote.trim()
+    const orderMessage = noteText
+      ? `Hello, I would like to order ${orderSummary.quantity} x ${orderSummary.itemName} from Success Valley Farms. Note: ${noteText}`
+      : `Hello, I would like to order ${orderSummary.quantity} x ${orderSummary.itemName} from Success Valley Farms.`
+
+    handleWhatsApp(orderMessage)
+    setOrderSummary(null)
+    setOrderNote('')
   }
 
   return (
@@ -213,7 +229,7 @@ export default function SuccessValleyFarmsPreview() {
 
         <section id="about" className="max-w-7xl mx-auto grid gap-10 px-6 py-20 md:grid-cols-2 md:px-8">
           <img
-            src="https://images.unsplash.com/photo-1514511390099-67376b11078c?auto=format&fit=crop&w=1400&q=80"
+            src={fish24}
             alt="Fish display"
             className="rounded-3xl shadow-2xl h-[360px] w-full object-cover"
           />
@@ -294,6 +310,48 @@ export default function SuccessValleyFarmsPreview() {
           <p className="text-sm">© 2026 Success Valley Farms. All Rights Reserved.</p>
         </div>
       </footer>
+
+      {orderSummary && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 px-4 py-4">
+          <div className="w-full max-w-md rounded-3xl bg-white p-5 shadow-2xl sm:p-6">
+            <p className="text-xs sm:text-sm uppercase tracking-[0.3em] text-rose-700 font-semibold">Order summary</p>
+            <h2 className="mt-3 text-xl sm:text-2xl font-bold text-slate-950">Confirm your order</h2>
+            <p className="mt-3 text-sm sm:text-base text-gray-600">
+              Review your order and add any extra details before sending to WhatsApp.
+            </p>
+            <div className="mt-4 rounded-2xl bg-gray-50 p-4 text-gray-800">
+              <p className="text-lg font-semibold">{orderSummary.itemName}</p>
+              <p className="mt-2 text-sm text-gray-600">Quantity: {orderSummary.quantity}</p>
+            </div>
+            <label className="mt-4 block text-sm font-semibold text-slate-800">
+              Order note
+              <textarea
+                value={orderNote}
+                onChange={(event) => setOrderNote(event.target.value)}
+                placeholder="Add delivery time, size, packaging, or any other instructions"
+                rows={4}
+                className="mt-2 w-full rounded-2xl border border-gray-300 bg-white px-4 py-3 text-sm text-gray-800 placeholder:text-gray-400 focus:border-rose-500 focus:outline-none"
+              />
+            </label>
+            <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:justify-end">
+              <button
+                type="button"
+                onClick={() => setOrderSummary(null)}
+                className="w-full rounded-2xl border border-gray-300 px-5 py-3 text-sm font-semibold text-gray-700 hover:bg-gray-100 sm:w-auto"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={confirmOrder}
+                className="w-full rounded-2xl bg-rose-700 px-5 py-3 text-sm font-semibold text-white hover:bg-rose-800 sm:w-auto"
+              >
+                Continue to WhatsApp
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
