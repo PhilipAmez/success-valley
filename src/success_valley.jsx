@@ -1,9 +1,12 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import NavItem from './components/NavItem'
 import FeatureCard from './components/FeatureCard'
 import ProductCard from './components/ProductCard'
 import BlogCard from './components/BlogCard'
 import SectionHeader from './components/SectionHeader'
+import client, { urlFor } from './lib/sanityClient'
+import { productsQuery, blogPostsQuery } from './lib/queries'
+import MapComponent from './components/MapComponent'
 import fishCatfishImage from './img/fish-fresh-caught-catfish.jpg'
 import logoImage from './img/logo.jpg'
 import pigfarmImage1 from './img/pig-farm.jpg'
@@ -79,6 +82,39 @@ export default function SuccessValleyFarmsPreview() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [orderSummary, setOrderSummary] = useState(null)
   const [orderNote, setOrderNote] = useState('')
+  const [productsData, setProductsData] = useState(products)
+  const [blogData, setBlogData] = useState(blogPosts)
+
+  useEffect(() => {
+    if (!import.meta.env.VITE_SANITY_PROJECT_ID) return
+
+    Promise.all([
+      client.fetch(productsQuery),
+      client.fetch(blogPostsQuery)
+    ])
+      .then(([productsResult, blogPostsResult]) => {
+        if (Array.isArray(productsResult) && productsResult.length > 0) {
+          setProductsData(
+            productsResult.map((item) => ({
+              ...item,
+              image: item.image ? urlFor(item.image).width(800).url() : ''
+            }))
+          )
+        }
+
+        if (Array.isArray(blogPostsResult) && blogPostsResult.length > 0) {
+          setBlogData(
+            blogPostsResult.map((item) => ({
+              ...item,
+              image: item.mainImage ? urlFor(item.mainImage).width(800).url() : ''
+            }))
+          )
+        }
+      })
+      .catch((error) => {
+        console.warn('Sanity fetch failed', error)
+      })
+  }, [])
 
   const scrollToSection = (sectionId) => {
     const section = document.getElementById(sectionId)
@@ -257,7 +293,7 @@ export default function SuccessValleyFarmsPreview() {
           <div className="max-w-7xl mx-auto">
             <SectionHeader eyebrow="Our Products" title="Fresh Meat & Fish Products" />
             <div className="grid gap-8 md:grid-cols-3">
-              {products.map((product) => (
+              {productsData.map((product) => (
                 <ProductCard key={product.name} product={product} onOrder={handleOrder} />
               ))}
             </div>
@@ -268,34 +304,59 @@ export default function SuccessValleyFarmsPreview() {
           <div className="max-w-7xl mx-auto">
             <SectionHeader eyebrow="Latest Updates" title="From Our Farm Blog" />
             <div className="grid gap-8 md:grid-cols-3">
-              {blogPosts.map((post) => (
+              {blogData.map((post) => (
                 <BlogCard key={post.title} post={post} />
               ))}
             </div>
           </div>
         </section>
 
-        <section id="contact" className="py-20 px-6 bg-slate-900 text-white text-center">
-          <div className="max-w-3xl mx-auto">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">Ready to Order?</h2>
-            <p className="text-base md:text-lg text-gray-200 leading-8 mb-10">
-              Contact Success Valley Farms today for bulk orders of meat and fish products, restaurant supply partnerships, and reliable deliveries.
-            </p>
-            <div className="flex flex-col gap-4 sm:flex-row sm:justify-center sm:gap-5">
-              <button
-                type="button"
-                onClick={handleCall}
-                className="bg-white text-slate-900 px-8 py-4 rounded-2xl font-bold shadow-lg hover:bg-gray-100 transition"
-              >
-                Call Now
-              </button>
-              <button
-                type="button"
-                onClick={() => handleWhatsApp()}
-                className="bg-rose-700 px-8 py-4 rounded-2xl font-bold shadow-lg hover:bg-rose-800 transition"
-              >
-                WhatsApp Us
-              </button>
+        <section id="contact" className="py-20 px-6 bg-slate-900 text-white">
+          <div className="max-w-7xl mx-auto grid gap-10 lg:grid-cols-[1.2fr_0.8fr] items-start">
+            <div className="max-w-3xl">
+              <h2 className="text-4xl md:text-5xl font-bold mb-6">Ready to Order?</h2>
+              <p className="text-base md:text-lg text-gray-200 leading-8 mb-8">
+                Contact Success Valley Farms today for bulk orders of meat and fish products, restaurant supply partnerships, and reliable deliveries.
+              </p>
+              <div className="grid gap-6 sm:grid-cols-2">
+                <div className="rounded-[2rem] border border-white/10 bg-slate-950/80 p-6 shadow-2xl">
+                  <p className="text-xs uppercase tracking-[0.3em] text-rose-300 mb-3">Our location</p>
+                  <p className="text-lg font-semibold">West Legon, Accra, Ghana</p>
+                  <p className="mt-3 text-sm text-gray-300 leading-6">
+                    Pop-up farm sales, restaurant pickup, and reliable local delivery available.
+                  </p>
+                </div>
+                <div className="rounded-[2rem] border border-white/10 bg-slate-950/80 p-6 shadow-2xl">
+                  <p className="text-xs uppercase tracking-[0.3em] text-rose-300 mb-3">Get in touch</p>
+                  <p className="text-lg font-semibold">Phone</p>
+                  <p className="mt-2 text-sm text-gray-300">+233 556 078 858</p>
+                  <p className="mt-4 text-lg font-semibold">WhatsApp</p>
+                  <p className="mt-2 text-sm text-gray-300">Tap the button to start a conversation.</p>
+                </div>
+              </div>
+              <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:justify-start">
+                <button
+                  type="button"
+                  onClick={handleCall}
+                  className="bg-white text-slate-900 px-8 py-4 rounded-2xl font-bold shadow-lg hover:bg-gray-100 transition"
+                >
+                  Call Now
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleWhatsApp()}
+                  className="bg-rose-700 px-8 py-4 rounded-2xl font-bold shadow-lg hover:bg-rose-800 transition"
+                >
+                  WhatsApp Us
+                </button>
+              </div>
+            </div>
+
+            <div className="overflow-hidden rounded-[2rem] border border-white/10 shadow-2xl">
+              <MapComponent />
+              <div className="bg-slate-950 px-4 py-3 text-xs text-gray-400">
+                Map data © OpenStreetMap contributors
+              </div>
             </div>
           </div>
         </section>

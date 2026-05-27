@@ -7,11 +7,17 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "studio:dev": "cd studio && npm run dev",
+    "studio:build": "cd studio && npm run build"
   },
   "dependencies": {
+    "@sanity/client": "^7.22.0",
+    "@sanity/image-url": "^2.1.1",
+    "leaflet": "^1.9.4",
     "react": "^19.2.6",
-    "react-dom": "^19.2.6"
+    "react-dom": "^19.2.6",
+    "react-leaflet": "^5.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
