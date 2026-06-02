@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { motion } from 'framer-motion'
 
 export default function ProductCard({ product, onOrder }) {
   const [quantity, setQuantity] = useState(1)
@@ -8,7 +9,14 @@ export default function ProductCard({ product, onOrder }) {
   const imageSrc = product.image || 'https://via.placeholder.com/800x600?text=Fresh+Product'
 
   return (
-    <div className="bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition duration-300">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      viewport={{ once: true, margin: '-100px' }}
+      whileHover={{ y: -8, boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)' }}
+      className="bg-white rounded-3xl overflow-hidden shadow-lg transition duration-300"
+    >
       <img src={imageSrc} alt={product.name} className="h-64 w-full object-cover" />
       <div className="p-6">
         <h3 className="text-2xl font-bold mb-3">{product.name}</h3>
@@ -38,6 +46,6 @@ export default function ProductCard({ product, onOrder }) {
           Order Now
         </button>
       </div>
-    </div>
+    </motion.div>
   )
 }

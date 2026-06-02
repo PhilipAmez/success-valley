@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { motion } from 'framer-motion'
 import NavItem from './components/NavItem'
 import FeatureCard from './components/FeatureCard'
 import ProductCard from './components/ProductCard'
@@ -230,28 +231,47 @@ export default function SuccessValleyFarmsPreview() {
         >
           <div className="absolute inset-0 bg-black/50"></div>
           <div className="relative z-10 mx-auto max-w-3xl px-6 text-white">
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-6">
+            <motion.h2
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-6"
+            >
               Fresh Meat & Fish Delivered With Quality
-            </h2>
-            <p className="text-base sm:text-xl text-gray-100 mb-8 leading-8">
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              className="text-base sm:text-xl text-gray-100 mb-8 leading-8"
+            >
               Success Valley Farms supplies premium meat and fish products to restaurants and food service institutions.
-            </p>
-            <div className="flex flex-col gap-4 sm:flex-row">
-              <button
+            </motion.p>
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.6 }}
+              className="flex flex-col gap-4 sm:flex-row"
+            >
+              <motion.button
                 type="button"
                 onClick={() => scrollToSection('products')}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 className="bg-rose-700 hover:bg-rose-800 px-6 py-4 rounded-2xl text-lg font-semibold shadow-xl transition"
               >
                 View Products
-              </button>
-              <button
+              </motion.button>
+              <motion.button
                 type="button"
                 onClick={() => scrollToSection('contact')}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 className="bg-white text-gray-900 px-6 py-4 rounded-2xl text-lg font-semibold shadow-xl hover:bg-gray-100 transition"
               >
                 Contact Us
-              </button>
-            </div>
+              </motion.button>
+            </motion.div>
           </div>
         </section>
 

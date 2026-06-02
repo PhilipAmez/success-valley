@@ -1,3 +1,5 @@
+import { motion } from 'framer-motion'
+
 export default function BlogCard({ post, onReadMore }) {
   const imageSrc = post.image || 'https://via.placeholder.com/800x600?text=Farm+Blog'
   
@@ -16,7 +18,14 @@ export default function BlogCard({ post, onReadMore }) {
   }
 
   return (
-    <div className="bg-gray-50 rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition duration-300">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      viewport={{ once: true, margin: '-100px' }}
+      whileHover={{ y: -8, boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.15)' }}
+      className="bg-gray-50 rounded-3xl overflow-hidden shadow-lg transition duration-300"
+    >
       <img src={imageSrc} alt={post.title} className="h-60 w-full object-cover" />
       <div className="p-6">
         <h3 className="text-2xl font-bold mb-4 text-slate-950">{post.title}</h3>
@@ -27,6 +36,6 @@ export default function BlogCard({ post, onReadMore }) {
           Read More
         </button>
       </div>
-    </div>
+    </motion.div>
   )
 }

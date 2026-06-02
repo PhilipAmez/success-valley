@@ -1,0 +1,11 @@
+/* Constrain Leaflet map z-index to stay within the map container */
+.map-container .leaflet-pane,
+.map-container .leaflet-control,
+.map-container .leaflet-popup {
+  z-index: auto !important;
+}
+
+/* Ensure the map doesn't overflow or float over other content */
+.map-container .leaflet-container {
+  z-index: 1;
+}
