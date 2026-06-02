@@ -5,10 +5,11 @@ export default function ProductCard({ product, onOrder }) {
 
   const decreaseQuantity = () => setQuantity((current) => Math.max(1, current - 1))
   const increaseQuantity = () => setQuantity((current) => Math.min(99, current + 1))
+  const imageSrc = product.image || 'https://via.placeholder.com/800x600?text=Fresh+Product'
 
   return (
     <div className="bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition duration-300">
-      <img src={product.image} alt={product.name} className="h-64 w-full object-cover" />
+      <img src={imageSrc} alt={product.name} className="h-64 w-full object-cover" />
       <div className="p-6">
         <h3 className="text-2xl font-bold mb-3">{product.name}</h3>
         <p className="text-gray-600 mb-6 leading-7">{product.description}</p>

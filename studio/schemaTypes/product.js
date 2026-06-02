@@ -1,24 +1,36 @@
-import {defineField, defineType} from 'sanity'
-
-export default defineType({
+export default {
   name: 'product',
   title: 'Product',
   type: 'document',
   fields: [
-    defineField({
+    {
       name: 'name',
       title: 'Name',
       type: 'string',
       validation: (Rule) => Rule.required(),
-    }),
-    defineField({
+    },
+    {
+      name: 'slug',
+      title: 'Slug',
+      type: 'slug',
+      options: {
+        source: 'name',
+        maxLength: 96,
+      },
+      validation: (Rule) => Rule.required(),
+    },
+    {
       name: 'description',
       title: 'Description',
       type: 'text',
-      rows: 4,
       validation: (Rule) => Rule.required(),
-    }),
-    defineField({
+    },
+    {
+      name: 'price',
+      title: 'Price',
+      type: 'number',
+    },
+    {
       name: 'image',
       title: 'Image',
       type: 'image',
@@ -26,18 +38,12 @@ export default defineType({
         hotspot: true,
       },
       validation: (Rule) => Rule.required(),
-    }),
-    defineField({
+    },
+    {
       name: 'publishedAt',
       title: 'Published at',
       type: 'datetime',
       validation: (Rule) => Rule.required(),
-    }),
-  ],
-  preview: {
-    select: {
-      title: 'name',
-      media: 'image',
     },
-  },
-})
+  ],
+}

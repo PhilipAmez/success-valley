@@ -10,5 +10,7 @@ export const blogPostsQuery = `*[_type == "post"] | order(publishedAt desc) {
   _id,
   title,
   mainImage,
-  publishedAt
+  publishedAt,
+  excerpt,
+  body
 }`

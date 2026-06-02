@@ -84,15 +84,16 @@ export default function SuccessValleyFarmsPreview() {
   const [orderNote, setOrderNote] = useState('')
   const [productsData, setProductsData] = useState(products)
   const [blogData, setBlogData] = useState(blogPosts)
+  const [selectedPost, setSelectedPost] = useState(null)
 
   useEffect(() => {
-    if (!import.meta.env.VITE_SANITY_PROJECT_ID) return
-
     Promise.all([
       client.fetch(productsQuery),
       client.fetch(blogPostsQuery)
     ])
       .then(([productsResult, blogPostsResult]) => {
+        let loaded = false
+
         if (Array.isArray(productsResult) && productsResult.length > 0) {
           setProductsData(
             productsResult.map((item) => ({
@@ -228,9 +229,6 @@ export default function SuccessValleyFarmsPreview() {
           }}
         >
           <div className="absolute inset-0 bg-black/50"></div>
-          <div className="absolute inset-0 flex items-center justify-center opacity-20 pointer-events-none">
-            <img src={logoImage} alt="" className="h-48 w-48 object-contain" />
-          </div>
           <div className="relative z-10 mx-auto max-w-3xl px-6 text-white">
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-6">
               Fresh Meat & Fish Delivered With Quality
@@ -305,7 +303,7 @@ export default function SuccessValleyFarmsPreview() {
             <SectionHeader eyebrow="Latest Updates" title="From Our Farm Blog" />
             <div className="grid gap-8 md:grid-cols-3">
               {blogData.map((post) => (
-                <BlogCard key={post.title} post={post} />
+                <BlogCard key={post.title} post={post} onReadMore={() => setSelectedPost(post)} />
               ))}
             </div>
           </div>
@@ -408,6 +406,56 @@ export default function SuccessValleyFarmsPreview() {
                 className="w-full rounded-2xl bg-rose-700 px-5 py-3 text-sm font-semibold text-white hover:bg-rose-800 sm:w-auto"
               >
                 Continue to WhatsApp
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {selectedPost && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 px-4 py-4 overflow-y-auto">
+          <div className="w-full max-w-2xl rounded-3xl bg-white shadow-2xl my-8">
+            <div className="relative">
+              <img src={selectedPost.image || 'https://via.placeholder.com/800x600?text=Blog'} alt={selectedPost.title} className="w-full h-80 object-cover rounded-t-3xl" />
+              <button
+                type="button"
+                onClick={() => setSelectedPost(null)}
+                className="absolute top-4 right-4 bg-white hover:bg-gray-100 rounded-full w-10 h-10 flex items-center justify-center text-xl font-bold text-gray-800 shadow-lg"
+              >
+                ✕
+              </button>
+            </div>
+            <div className="p-6 sm:p-8">
+              <p className="text-xs uppercase tracking-[0.3em] text-rose-700 font-semibold mb-2">Blog Post</p>
+              <h2 className="text-3xl sm:text-4xl font-bold text-slate-950 mb-4">{selectedPost.title}</h2>
+              {selectedPost.publishedAt && (
+                <p className="text-sm text-gray-500 mb-6">
+                  Published: {new Date(selectedPost.publishedAt).toLocaleDateString()}
+                </p>
+              )}
+              <div className="prose prose-lg max-w-none text-gray-700 leading-8">
+                {selectedPost.body ? (
+                  typeof selectedPost.body === 'string' ? (
+                    <p>{selectedPost.body}</p>
+                  ) : Array.isArray(selectedPost.body) ? (
+                    selectedPost.body.map((block, idx) => (
+                      <p key={idx}>
+                        {block.children?.map((child, cidx) => (
+                          <span key={cidx}>{child.text}</span>
+                        ))}
+                      </p>
+                    ))
+                  ) : null
+                ) : (
+                  <p>Learn more about our farming process, product quality, and how we serve businesses with fresh agricultural products.</p>
+                )}
+              </div>
+              <button
+                type="button"
+                onClick={() => setSelectedPost(null)}
+                className="mt-8 w-full rounded-2xl bg-rose-700 hover:bg-rose-800 text-white px-6 py-3 font-semibold transition"
+              >
+                Close
               </button>
             </div>
           </div>
