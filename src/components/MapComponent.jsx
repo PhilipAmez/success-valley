@@ -25,7 +25,7 @@ export default function MapComponent() {
           <Popup>
             <div className="text-center">
               <p className="font-bold text-sm">Success Valley Farms</p>
-              <p className="text-xs text-gray-600">West Legon, Accra, Ghana</p>
+              <p className="text-xs text-gray-600">Afariwa, Tema, Ghana</p>
             </div>
           </Popup>
         </Marker>

@@ -8,6 +8,7 @@ import SectionHeader from './components/SectionHeader'
 import client, { urlFor } from './lib/sanityClient'
 import { productsQuery, blogPostsQuery } from './lib/queries'
 import MapComponent from './components/MapComponent'
+import SocialLinks from './components/SocialLinks'
 import fishCatfishImage from './img/fish-fresh-caught-catfish.jpg'
 import logoImage from './img/logo.jpg'
 import pigfarmImage1 from './img/pig-farm.jpg'
@@ -127,13 +128,13 @@ export default function SuccessValleyFarmsPreview() {
   }
 
   const handleWhatsApp = (message = 'Hello Success Valley Farms, I would like to place an order.') => {
-    const phone = '0556078858'
+    const phone = '+233242648623'
     const encoded = encodeURIComponent(message)
     window.open(`https://wa.me/${phone}?text=${encoded}`, '_blank')
   }
 
   const handleCall = () => {
-    window.location.href = 'tel:+1234567890'
+    window.location.href = 'tel:+233242648623'
   }
 
   const handleOrder = (itemName, quantity = 1) => {
@@ -339,7 +340,7 @@ export default function SuccessValleyFarmsPreview() {
               <div className="grid gap-6 sm:grid-cols-2">
                 <div className="rounded-[2rem] border border-white/10 bg-slate-950/80 p-6 shadow-2xl">
                   <p className="text-xs uppercase tracking-[0.3em] text-rose-300 mb-3">Our location</p>
-                  <p className="text-lg font-semibold">West Legon, Accra, Ghana</p>
+                  <p className="text-lg font-semibold">Afariwa, Tema, Ghana</p>
                   <p className="mt-3 text-sm text-gray-300 leading-6">
                     Pop-up farm sales, restaurant pickup, and reliable local delivery available.
                   </p>
@@ -347,7 +348,7 @@ export default function SuccessValleyFarmsPreview() {
                 <div className="rounded-[2rem] border border-white/10 bg-slate-950/80 p-6 shadow-2xl">
                   <p className="text-xs uppercase tracking-[0.3em] text-rose-300 mb-3">Get in touch</p>
                   <p className="text-lg font-semibold">Phone</p>
-                  <p className="mt-2 text-sm text-gray-300">+233 556 078 858</p>
+                  <p className="mt-2 text-sm text-gray-300">+233242648623</p>
                   <p className="mt-4 text-lg font-semibold">WhatsApp</p>
                   <p className="mt-2 text-sm text-gray-300">Tap the button to start a conversation.</p>
                 </div>
@@ -381,10 +382,14 @@ export default function SuccessValleyFarmsPreview() {
       </main>
 
       <footer className="bg-black text-gray-400 py-8">
-        <div className="mx-auto flex max-w-7xl flex-col items-center gap-4 px-6 sm:flex-row sm:justify-between">
+        <div className="mx-auto flex max-w-7xl flex-col items-center gap-6 px-6 sm:flex-row sm:justify-between sm:items-center">
           <div className="flex items-center gap-3 text-white">
             <img src={logoImage} alt="Success Valley Farms logo" className="h-10 w-10 rounded-full border border-gray-700 object-cover" />
             <span className="text-sm font-semibold">Success Valley Farms</span>
+          </div>
+          <div className="flex flex-col items-center gap-2 text-center">
+            <span className="text-xs uppercase tracking-[0.3em] text-rose-300 font-bold">Follow us</span>
+            <SocialLinks />
           </div>
           <p className="text-sm">© 2026 Success Valley Farms. All Rights Reserved.</p>
         </div>
