@@ -525,10 +525,18 @@ export default function SuccessValleyFarmsPreview() {
       )}
 
       {selectedPost && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 px-4 py-4 overflow-y-auto">
-          <div className="w-full max-w-2xl rounded-3xl bg-white shadow-2xl my-8">
+        <div className="fixed inset-0 z-[60] flex items-start justify-center bg-black/40 backdrop-blur-sm px-4 py-6 overflow-y-auto">
+          <div className="w-full max-w-2xl rounded-3xl bg-white/95 shadow-[0_35px_90px_rgba(15,23,42,0.25)] my-8 max-h-[calc(100vh-3rem)] overflow-hidden ring-1 ring-white/10">
             <div className="relative">
-              <img src={selectedPost.image || 'https://via.placeholder.com/800x600?text=Blog'} alt={selectedPost.title} className="w-full h-80 object-cover rounded-t-3xl" />
+              <img
+                src={
+                  selectedPost.image ||
+                  selectedPost.mainImage?.asset?.url ||
+                  (selectedPost.mainImage ? urlFor(selectedPost.mainImage).width(800).url() : 'https://via.placeholder.com/800x600?text=Blog')
+                }
+                alt={selectedPost.title}
+                className="w-full h-80 object-cover rounded-t-3xl"
+              />
               <button
                 type="button"
                 onClick={() => setSelectedPost(null)}
@@ -537,7 +545,7 @@ export default function SuccessValleyFarmsPreview() {
                 ✕
               </button>
             </div>
-            <div className="p-6 sm:p-8">
+            <div className="p-6 sm:p-8 overflow-y-auto max-h-[calc(100vh-18rem)]">
               <p className="text-xs uppercase tracking-[0.3em] text-rose-700 font-semibold mb-2">Blog Post</p>
               <h2 className="text-3xl sm:text-4xl font-bold text-slate-950 mb-4">{selectedPost.title}</h2>
               {selectedPost.publishedAt && (

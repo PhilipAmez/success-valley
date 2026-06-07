@@ -1,7 +1,11 @@
 import { motion } from 'framer-motion'
+import { urlFor } from '../lib/sanityClient'
 
 export default function BlogCard({ post, onReadMore }) {
-  const imageSrc = post.image || 'https://via.placeholder.com/800x600?text=Farm+Blog'
+  const imageSrc =
+    post.image ||
+    post.mainImage?.asset?.url ||
+    (post.mainImage ? urlFor(post.mainImage).width(800).url() : 'https://via.placeholder.com/800x600?text=Farm+Blog')
   
   const getPreviewText = () => {
     if (post.excerpt) return post.excerpt
