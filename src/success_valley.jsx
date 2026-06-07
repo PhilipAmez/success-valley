@@ -155,6 +155,93 @@ export default function SuccessValleyFarmsPreview() {
     setOrderNote('')
   }
 
+  const renderPortableText = (body) => {
+    if (!body) return null
+    if (typeof body === 'string') return <p>{body}</p>
+    if (!Array.isArray(body)) return null
+
+    const elements = []
+    let listBuffer = null
+
+    const flushList = (key) => {
+      if (!listBuffer) return
+      const { type, items } = listBuffer
+      if (type === 'number') {
+        elements.push(
+          <ol key={key || `ol-${elements.length}`} className="pl-6 list-decimal mt-2">
+            {items.map((it, i) => (
+              <li key={i} className="mb-1">
+                {it}
+              </li>
+            ))}
+          </ol>
+        )
+      } else {
+        elements.push(
+          <ul key={key || `ul-${elements.length}`} className="pl-6 list-disc mt-2">
+            {items.map((it, i) => (
+              <li key={i} className="mb-1">
+                {it}
+              </li>
+            ))}
+          </ul>
+        )
+      }
+      listBuffer = null
+    }
+
+    body.forEach((block, idx) => {
+      if (!block) return
+      if (block._type === 'block') {
+        const text = (block.children || []).map((c) => c.text || '').join('')
+
+        if (block.listItem) {
+          const listType = block.listItem === 'number' || block.listItem === 'ordered' ? 'number' : 'bullet'
+          if (!listBuffer) listBuffer = { type: listType, items: [] }
+          listBuffer.items.push(text)
+        } else {
+          // flush any previous list
+          flushList(`flush-${idx}`)
+
+          const style = block.style || 'normal'
+          if (style === 'h1' || style === 'h2' || style === 'h3') {
+            const Tag = style === 'h1' ? 'h1' : style === 'h2' ? 'h2' : 'h3'
+            elements.push(
+              <Tag key={idx} className={`mb-3 ${style === 'h1' ? 'text-3xl' : style === 'h2' ? 'text-2xl' : 'text-xl'} font-bold`}>
+                {text}
+              </Tag>
+            )
+          } else {
+            elements.push(
+              <p key={idx} className="mb-3 text-gray-700">
+                {text}
+              </p>
+            )
+          }
+        }
+      } else if (block._type === 'image') {
+        // flush list before rendering image
+        flushList(`img-${idx}`)
+        const src = block?.asset ? urlFor(block.asset).width(800).url() : ''
+        elements.push(
+          <img key={idx} src={src} alt={block.alt || ''} className="w-full rounded-md my-3 object-cover" />
+        )
+      } else {
+        // unknown block types: flush lists and render raw JSON text fallback
+        flushList(`other-${idx}`)
+        elements.push(
+          <pre key={idx} className="whitespace-pre-wrap text-sm text-gray-700 bg-gray-50 p-3 rounded">
+            {JSON.stringify(block)}
+          </pre>
+        )
+      }
+    })
+
+    // flush any remaining list
+    flushList('end')
+    return elements
+  }
+
   return (
     <div className="min-h-screen bg-white text-gray-800 font-sans">
       <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200 shadow-sm">
@@ -460,17 +547,7 @@ export default function SuccessValleyFarmsPreview() {
               )}
               <div className="prose prose-lg max-w-none text-gray-700 leading-8">
                 {selectedPost.body ? (
-                  typeof selectedPost.body === 'string' ? (
-                    <p>{selectedPost.body}</p>
-                  ) : Array.isArray(selectedPost.body) ? (
-                    selectedPost.body.map((block, idx) => (
-                      <p key={idx}>
-                        {block.children?.map((child, cidx) => (
-                          <span key={cidx}>{child.text}</span>
-                        ))}
-                      </p>
-                    ))
-                  ) : null
+                  <>{renderPortableText(selectedPost.body)}</>
                 ) : (
                   <p>Learn more about our farming process, product quality, and how we serve businesses with fresh agricultural products.</p>
                 )}
